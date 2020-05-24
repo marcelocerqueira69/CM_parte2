@@ -1,80 +1,101 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import * as tudo from 'react-native';
 
-import AddNoteScreen from './AddNoteScreen';
-
 import Realm from 'realm';
-let realm;
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
-export default class NotesScreen extends Component {
-    constructor(props) {
-        super(props);
-        realm = new Realm({
-            path: 'notas.realm',
-            schema: [{
-                name: 'notas',
-                properties: {
-                    id: { type: 'int', default: 0 },
-                    assunto: 'string',
-                    descricao: 'string',
-                    data: 'string',
-                }
-            }]
-        })
-        var notas = realm.objects('notas');
-        this.state = {
-            FlatListItems: notas,
+
+const realm = new Realm({
+    path: 'notas.realm',
+    schema: [{
+        name: 'nota',
+        properties: {
+            id: { type: 'int', default: 0 },
+            assunto: 'string',
+            descricao: 'string',
+            data: 'string',
         }
+    }]
+});
+
+const query = () => realm.objects('nota');
+
+function getupdateddata(query) {
+    const [data, setData] = useState(query());
+
+    useEffect(
+        () => {
+            function handleChange(newData) {
+                setData([...newData]);
+            }
+            const dataQuery = query();
+            dataQuery.addListener(handleChange);
+            return () => {
+                dataQuery.removeAllListeners();
+            };
+        },
+        [query]
+    );
+    return data;
+}
+
+
+function NotesScreen({ navigation }) {
+
+    /*ListViewSeparator = () => {
+        return (
+            <View style={{ height: 0.5, width: '100%', backgroundColor: '#000' }} />
+        );
+    };*/
+    function actionOnRow(item){
+        navigation.navigate('EditDelete', item);
     }
 
-
-ListViewSeparator = () => {
-    return (
-        <View style={{ height: 0.5, width: '100%', backgroundColor: '#000' }} />
-    );
-};
-
-render() {
-    //const info = this.state.realm ? 'Number of dogs in this Realm: ' + this.state.realm.objects('notes').length: 'Loading...';
-    const info = this.state.realm;
+    const notas = getupdateddata(query);
     return (
         <tudo.View style={styles.full}>
             <tudo.View style={styles.header}>
                 <tudo.Text style={styles.text}>Notes</tudo.Text>
-                <tudo.TouchableOpacity 
+                <tudo.TouchableOpacity
                     style={styles.addNote}
-                    onPress={() => this.props.navigation.navigate('AddNote')}>
+                    onPress={() => navigation.navigate('AddNote')}>
                     <tudo.Image style={styles.image}
-                    source={require('../images/add_note_transaction.png')} />
+                        source={require('../images/add_note_transaction.png')} />
                 </tudo.TouchableOpacity>
             </tudo.View>
             <tudo.FlatList
                 style={styles.flatList}
-                data={this.state.FlatListItems}
-                ItemSeparatorComponent={this.ListViewSeparator}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={({item}) => (
-                    <tudo.View style={{backgroundColor: 'white', padding: '20'}}>
-                        <tudo.Text>Assunto: {item.assunto}</tudo.Text>
-                        <tudo.Text>Descrição: {item.descricao}</tudo.Text>
-                        <tudo.Text>Data: {item.data}</tudo.Text>
-                    </tudo.View>
+                data={notas}
+                //ItemSeparatorComponent={ListViewSeparator}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item }) => (
+                    <tudo.TouchableWithoutFeedback onPress={() => actionOnRow(item)}>
+                        <tudo.View style={{ backgroundColor: "#dedede", padding: 20, borderBottomWidth: 1, borderBottomColor: '#000000', flexDirection: 'row' }}>
+                            <tudo.Image style={{ width: 70, height: 70, margin: 7 }} source={require('../images/notepad.png')} />
+                            <tudo.View style={{ flexDirection: 'column' }}>
+                                <tudo.Text style={{ marginBottom: 5 }}>Assunto: {item.assunto}</tudo.Text>
+                                <tudo.Text style={{ marginBottom: 5 }}>Descrição: {item.descricao}</tudo.Text>
+                                <tudo.Text style={{ marginBottom: 5 }}>Data: {item.data}</tudo.Text>
+                            </tudo.View>
+                        </tudo.View>
+                    </tudo.TouchableWithoutFeedback>
                 )}
+
             />
         </tudo.View>
     )
 }
-}
+
 
 const styles = tudo.StyleSheet.create({
     underline: {
         textDecorationLine: 'underline'
     },
-    flatList:{
-        flex:1,
+    flatList: {
+        flex: 1,
     },
-    header:{
-        flex:0.095,
+    header: {
+        flex: 0.095,
         backgroundColor: '#ff660d',
     },
     full: {
@@ -109,8 +130,8 @@ const styles = tudo.StyleSheet.create({
     text: {
         color: 'black',
         fontSize: 20,
-        marginTop:13,
-        marginLeft:12,
+        marginTop: 13,
+        marginLeft: 12,
     },
     textinput: {
         height: 40,
@@ -124,6 +145,8 @@ const styles = tudo.StyleSheet.create({
         //position:"relative",
         alignItems: 'flex-end',
         marginRight: 10,
-        bottom:"37%"
+        bottom: "37%"
     },
 });
+
+export default NotesScreen;

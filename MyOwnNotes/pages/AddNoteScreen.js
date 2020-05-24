@@ -18,10 +18,10 @@ class AddNoteScreen extends Component {
 
     addRegisto=()=>{
         realm.write(() => {
-            var ID = realm.objects('notas').length + 1;
+            var ID = realm.objects('nota').length;
             var d = new Date();
             var date = d.getDate() + "/" + (d.getMonth()+1) + "/" +  d.getFullYear();
-            realm.create('notas', {
+            realm.create('nota', {
                 id: ID,
                 assunto:this.state.assunto,
                 descricao: this.state.descricao,
@@ -29,10 +29,7 @@ class AddNoteScreen extends Component {
             })
         })
         tudo.Alert.alert("Nota adicionada com sucesso!");
-    }
-    count=()=>{
-        var ID = realm.objects('notas').length + 1;
-        tudo.Alert.alert("Nº de notas: " + ID);
+        this.props.navigation.navigate('Notes')
     }
 
     render(){
@@ -56,10 +53,6 @@ class AddNoteScreen extends Component {
                     color='#ff660d'
                     title='Submeter'
                     onPress={this.addRegisto}
-                />
-                <tudo.Button
-                    title='Contar'
-                    onPress={this.count}
                 />
             </tudo.View>
         )
