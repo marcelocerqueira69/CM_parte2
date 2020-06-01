@@ -10,6 +10,7 @@ class EditdeleteNote extends Component {
     constructor(props){
         super(props);
         this.state = {
+            navigation: props.navigation,
             id: this.props.route.params.id,
             assunto: this.props.route.params.assunto,
             descricao: this.props.route.params.descricao,
@@ -94,7 +95,7 @@ class EditdeleteNote extends Component {
                     value={this.state.descricao}
                     onChangeText={(text) => {this.setState({descricao: text})}}>
                 </tudo.TextInput>
-                <tudo.Button color='#ff660d' title='Apagar' onPress={() => this.deleteNota()}/>
+                <tudo.Button color='#ff660d' title='Apagar' onPress={() => this.deleteRegisto()}/>
                 <tudo.Button color='#ff660d' title='Atualizar' onPress={() => this.updateRegisto()}/>
             </tudo.View>
         )

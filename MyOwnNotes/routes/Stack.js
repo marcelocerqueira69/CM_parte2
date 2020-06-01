@@ -4,10 +4,13 @@ import * as tudo from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import Home from './../pages/HomeScreen';
-import Notes from './../pages/NotesScreen';
-import AddNote from './../pages/AddNoteScreen';
-import EditDelete from './../pages/EditDeleteNote';
+import Home from '../pages/HomeScreen';
+import Notes from '../pages/NotesScreen';
+import AddNote from '../pages/AddNoteScreen';
+import EditDelete from '../pages/EditDeleteNote';
+import Map from '../pages/Map';
+import Problems from '../pages/Problems'
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const Stack = createStackNavigator();
 
@@ -32,12 +35,26 @@ function NotasStack({ navigation }) {
                     options={{
                         headerStyle: { backgroundColor: '#ff660d' },
                     }} />
-                
+
                 <Stack.Screen name='EditDelete'
                     component={EditDelete}
                     options={{
                         headerStyle: { backgroundColor: '#ff660d' },
-                    }}/>
+                    }} />
+
+                <Stack.Screen name='Map'
+                    component={Map}
+                    options={{
+                        //headerStyle: { backgroundColor: '#ff660d' },
+                        header: () => null
+                    }}
+                />
+
+                <Stack.Screen name='Problems'
+                    component={Problems}
+                    options={{
+                        headerStyle: { backgroundColor: '#ff660d' },
+                    }} />
             </Stack.Navigator>
         </NavigationContainer >
     )

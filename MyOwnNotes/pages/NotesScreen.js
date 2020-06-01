@@ -36,6 +36,7 @@ function getupdateddata(query) {
         },
         [query]
     );
+    
     return data;
 }
 

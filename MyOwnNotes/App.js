@@ -1,24 +1,4 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
 import React from 'react';
-/*import {
-  Image,
-  Button,
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-  TextInput,
-} from 'react-native';*/
-
 import * as tudo from 'react-native';
 
 import {
@@ -32,7 +12,7 @@ import {
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import Navigator from './routes/NotasStack';
+import Navigator from './routes/Stack';
 
 const Stack = createStackNavigator();
 
