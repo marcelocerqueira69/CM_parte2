@@ -18,6 +18,7 @@ class Map extends Component {
             markers: [],
             latitudeAtual: 0,
             longitudeAtual: 0,
+            orientation: '',
         }
 
     }
@@ -38,17 +39,25 @@ class Map extends Component {
             this.setState({
                 latitudeAtual: position.coords.latitude,
                 longitudeAtual: position.coords.longitude,
-            }) 
+            })
         })
 
         this.getMarkers()
         console.log('Map: ' + this.state.id);
+
+        tudo.Dimensions.addEventListener('change', ({ window: { width, height } }) => {
+            if (width < height) {
+                this.setState({ orientation: 'Portrait' });
+            } else {
+                this.setState({ orientation: 'Landscape' });
+            }
+        })
     }
 
     render() {
         return (
             <tudo.View style={styles.container}>
-                <tudo.View style={styles.header}>
+                <tudo.View style={this.state.orientation == 'Landscape' ? styles.headerL : styles.headerP}>
                     <tudo.Text style={styles.text}>Map</tudo.Text>
                     <tudo.TouchableOpacity
                         style={styles.userProblems}
@@ -61,12 +70,12 @@ class Map extends Component {
                     provider={PROVIDER_GOOGLE}
                     style={styles.map}
                     region={{
-                        latitude: 41.729655, 
+                        latitude: 41.729655,
                         longitude: -8.53339,
                         latitudeDelta: 0.1,
                         longitudeDelta: 0.1,
                     }}
-                    onLongPress={() => this.state.navigation.navigate('AddMarker', {latitude: this.state.latitudeAtual, longitude: this.state.longitudeAtual})}>
+                    onLongPress={() => this.state.navigation.navigate('AddMarker', { latitude: this.state.latitudeAtual, longitude: this.state.longitudeAtual })}>
                     {
                         this.state.markers.map(marker =>
                             <Marker
@@ -125,8 +134,12 @@ const styles = tudo.StyleSheet.create({
         height: 100,
         width: 100,
     },
-    header: {
+    headerP: {
         flex: 0.095,
+        backgroundColor: '#ff660d',
+    },
+    headerL: {
+        flex: 0.18,
         backgroundColor: '#ff660d',
     },
     userProblems: {

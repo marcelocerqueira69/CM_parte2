@@ -4,6 +4,8 @@ import * as tudo from 'react-native';
 import Realm from 'realm';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
+const window = tudo.Dimensions.get("window")
+const screen = tudo.Dimensions.get("screen")
 
 const realm = new Realm({
     path: 'notas.realm',
@@ -52,10 +54,23 @@ function NotesScreen({ navigation }) {
         navigation.navigate('EditDelete', item);
     }
 
+    const [dimensions, setDimensions] = useState({window, screen});
+
+    const onChange = ({window, screen}) => {
+        setDimensions({window, screen});
+    }
+
+    useEffect(() => {
+        tudo.Dimensions.addEventListener("change", onChange);
+        return () => {
+                tudo.Dimensions.removeEventListener("change", onChange);
+        }
+    })
+ 
     const notas = getupdateddata(query);
     return (
         <tudo.View style={styles.full}>
-            <tudo.View style={styles.header}>
+            <tudo.View style={dimensions.window.height > dimensions.window.width ? styles.headerP : styles.headerL}>
                 <tudo.Text style={styles.text}>Notes</tudo.Text>
                 <tudo.TouchableOpacity
                     style={styles.addNote}
@@ -95,8 +110,12 @@ const styles = tudo.StyleSheet.create({
     flatList: {
         flex: 1,
     },
-    header: {
+    headerP: {
         flex: 0.095,
+        backgroundColor: '#ff660d',
+    },
+    headerL: {
+        flex: 0.18,
         backgroundColor: '#ff660d',
     },
     full: {
