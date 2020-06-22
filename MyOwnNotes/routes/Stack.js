@@ -10,6 +10,8 @@ import AddNote from '../pages/AddNoteScreen';
 import EditDelete from '../pages/EditDeleteNote';
 import Map from '../pages/Map';
 import Problems from '../pages/Problems'
+import AddMarker from '../pages/AddMarker'
+import EditDeleteProblem from '../pages/EditDeleteProblem';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const Stack = createStackNavigator();
@@ -52,6 +54,16 @@ function NotasStack({ navigation }) {
 
                 <Stack.Screen name='Problems'
                     component={Problems}
+                    options={{
+                        headerStyle: { backgroundColor: '#ff660d' },
+                    }} />
+                <Stack.Screen name='AddMarker'
+                    component={AddMarker}
+                    options={{
+                        headerStyle: { backgroundColor: '#ff660d' },
+                    }} />
+                <Stack.Screen name='EditDeleteProblem'
+                    component={EditDeleteProblem}
                     options={{
                         headerStyle: { backgroundColor: '#ff660d' },
                     }} />

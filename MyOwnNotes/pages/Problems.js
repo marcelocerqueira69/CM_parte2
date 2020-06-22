@@ -9,6 +9,7 @@ class Problems extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            navigation: props.navigation,
             id: this.props.route.params,
             problemas: [],
         }
@@ -36,7 +37,7 @@ class Problems extends Component {
                 data={this.state.problemas}
                 keyExtractor={(item) => item.id_ponto}
                 renderItem={({ item }) => (
-                    <tudo.TouchableWithoutFeedback /*onPress={() => actionOnRow(item)}*/>
+                    <tudo.TouchableWithoutFeedback onPress={() => this.state.navigation.navigate('EditDeleteProblem', {item: item, id_user: this.state.id})}>
                         <tudo.View style={{ backgroundColor: "#dedede", padding: 20, borderBottomWidth: 1, borderBottomColor: '#000000', flexDirection: 'row' }}>
                             <tudo.Image style={{ width: 90, height: 90, margin: 7 }} source={{uri: images + item.imagem}} />
                             <tudo.View style={{ flexDirection: 'column' }}>

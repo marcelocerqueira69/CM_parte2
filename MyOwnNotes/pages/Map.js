@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import * as tudo from 'react-native';
 import axios from 'axios';
+import Geolocation from '@react-native-community/geolocation'
 
 import MapView, { PROVIDER_GOOGLE, Marker, Callout } from 'react-native-maps';
 let markersURL = 'http://192.168.1.67:4000/pontos/getPontos'
@@ -15,6 +16,8 @@ class Map extends Component {
             id: this.props.route.params,
             navigation: props.navigation,
             markers: [],
+            latitudeAtual: 0,
+            longitudeAtual: 0,
         }
 
     }
@@ -31,6 +34,13 @@ class Map extends Component {
 
 
     componentDidMount() {
+        Geolocation.getCurrentPosition(position => {
+            this.setState({
+                latitudeAtual: position.coords.latitude,
+                longitudeAtual: position.coords.longitude,
+            }) 
+        })
+
         this.getMarkers()
         console.log('Map: ' + this.state.id);
     }
@@ -51,11 +61,12 @@ class Map extends Component {
                     provider={PROVIDER_GOOGLE}
                     style={styles.map}
                     region={{
-                        latitude: 41.6332,
-                        longitude: -8.54328,
+                        latitude: 41.729655, 
+                        longitude: -8.53339,
                         latitudeDelta: 0.1,
                         longitudeDelta: 0.1,
-                    }}>
+                    }}
+                    onLongPress={() => this.state.navigation.navigate('AddMarker', {latitude: this.state.latitudeAtual, longitude: this.state.longitudeAtual})}>
                     {
                         this.state.markers.map(marker =>
                             <Marker
