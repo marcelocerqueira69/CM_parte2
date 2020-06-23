@@ -3,11 +3,9 @@ import * as tudo from 'react-native';
 import jwt_decode from 'jwt-decode';
 import axios from 'axios';
 import { onChange } from 'react-native-reanimated';
-
-
+import {translations} from '../services/translations'
 
 class HomeScreen extends Component {
-
   constructor(props) {
     super(props);
 
@@ -163,14 +161,14 @@ class HomeScreen extends Component {
           <tudo.View style={styles.buttonview}>
             <tudo.Button
               color='#ff660d'
-              title='Entrar'
+              title={translations.btn_entrar}
               onPress={() => this.login(this.state.email, this.state.password)}
             />
           </tudo.View>
 
           <tudo.Text
             style={styles.underline}
-            onPress={() => this.props.navigation.navigate('Notes')}>Entrar como anónimo</tudo.Text>
+            onPress={() => this.props.navigation.navigate('Notes')}>{translations.anonimo}</tudo.Text>
 
 
         </tudo.View>

@@ -8,7 +8,6 @@ let markersURL = 'http://192.168.1.67:4000/pontos/getPontos'
 let images = 'http://192.168.1.67:4000/'
 
 class Map extends Component {
-
     constructor(props) {
         super(props);
 
@@ -22,6 +21,7 @@ class Map extends Component {
         }
 
     }
+    
 
     getMarkers() {
         return axios.get('http://192.168.1.67:4000/pontos/getPontos')
@@ -31,6 +31,11 @@ class Map extends Component {
             .catch((error) => {
                 console.log(error);
             });
+    }
+
+    logout = () => {
+        this.state.navigation.replace('Home')
+        console.log("logout")
     }
 
 
@@ -65,6 +70,12 @@ class Map extends Component {
                         <tudo.Image style={styles.imageButton}
                             source={require('../images/open-menu.png')} />
                     </tudo.TouchableOpacity>
+                    <tudo.TouchableOpacity
+                        style={styles.Logout}
+                        onPress={() => this.logout()}>
+                        <tudo.Image style={styles.imageButton}
+                            source={require('../images/logout.png')} />
+                    </tudo.TouchableOpacity>
                 </tudo.View>
                 <MapView
                     provider={PROVIDER_GOOGLE}
@@ -75,7 +86,7 @@ class Map extends Component {
                         latitudeDelta: 0.1,
                         longitudeDelta: 0.1,
                     }}
-                    onLongPress={() => this.state.navigation.navigate('AddMarker', { latitude: this.state.latitudeAtual, longitude: this.state.longitudeAtual })}>
+                    onLongPress={() => this.state.navigation.navigate('AddMarker', { latitude: this.state.latitudeAtual, longitude: this.state.longitudeAtual , id: this.state.id})}>
                     {
                         this.state.markers.map(marker =>
                             <Marker
@@ -146,6 +157,11 @@ const styles = tudo.StyleSheet.create({
         alignItems: 'flex-end',
         marginRight: 10,
         bottom: "37%"
+    },
+    Logout: {
+        alignItems: 'flex-end',
+        marginRight: 40,
+        bottom: "71%"
     },
     text: {
         color: 'black',
